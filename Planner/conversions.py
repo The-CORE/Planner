@@ -50,16 +50,30 @@ def days_between(start, end):
             current_list[index] += direction
     return days_between
 
+def validate_string_date(date):
+    if not valid_string_date(date):
+        raise ValueError("Invalid date, dates should be formatted 'yyyymmdd'.")
+
 def valid_sting_date(date):
     valid = True
 
     if not isinstance(date, str):
-        value = False
+        valid = False
 
-    #if len(date) !=
+    date = str(date)
+
+    if len(date) != 8:
+        valid = False
 
     try:
-        date = int(date)
+        int_date = int(date)
+
+        #There was no year zero.
+        if int_date < 10101:
+            valid = False
+
     except ValueError:
         valid = False
+
+    #STILL MORE THINGS (esspecially like segmenting it and checking each part.)
 
