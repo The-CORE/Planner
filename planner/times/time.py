@@ -14,15 +14,11 @@ class Time:
         # The reason I don't just assign the properties here, is becuase I don't
         # want to allow carrying when it is first created, only when it is added
         # to.
-
-        # The premise of the months and days is modular arithmatic, such that 0,
-        # as there is no actual 0 month or day, is the last value.
-        # The original setting will be in the form the user will understand.
         validate_limited_integer(1, 12, month, "month")
-        self._month = month % 12
+        self._month = month
         days_in_month = days_in_period([year, month, 1], 1)
         validate_limited_integer(1, days_in_month, day, "day")
-        self._day = day % days_in_month
+        self._day = day
         validate_limited_integer(
             0,
             NUMBER_OF_EVENTS_IN_A_DAY - 1,
@@ -102,3 +98,31 @@ class Time:
     def __add__(self, value_to_add):
         if not isinstance(value_to_add, Time):
             return NotImplemented
+        self.event_time_slot += value_to_add.event_time_slot
+        self.day += value_to_add.day
+        self.month += value_to_add.month
+        if self.year == -value_to_add.year:
+            # If above is true, then an addition would result in zero.
+            # Also, it is known that neither or of the above values are zero, as
+            # they have been validated by the Time object.
+            self.year += value_to_add.year \
+                + abs(value_to_add.year) / value_to_add.year
+            # One more is added in the direction it was going, to get past zero.
+        else:
+            self.year += value_to_add.year
+
+    def __sub__(self, value_to_sub):
+        if not isinstance(value_to_sub, Time):
+            return NotImplemented
+        self.event_time_slot -= value_to_sub.event_time_slot
+        self.day -= value_to_sub.day
+        self.month -= value_to_sub.month
+        if self.year == value_to_sub.year:
+            # If above is true, then a subtraction would result in zero.
+            # Also, it is known that neither or of the above values are zero, as
+            # they have been validated by the Time object.
+            self.year -= value.year + abs(value.year) / value.year
+            # One more is subtracted in the direction it was going, to get past
+            # zero.
+        else:
+            self.year += value_to_sub.year
