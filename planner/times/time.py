@@ -6,19 +6,23 @@ from .utilities import days_in_period
 
 class Time:
     def __init__(self, year, month, day, event_time_slot):
-        self.year = year
         # While the event time slot will begin at zero, I could bring myself to
         # do it for the months and days, the computer scientist in me was
         # unfortunately betten by that tiny sliver of common sense that surfaces
         # so rarely within me.
+        self.year = year
         # The reason I don't just assign the properties here, is becuase I don't
         # want to allow carrying when it is first created, only when it is added
         # to.
+
+        # The premise of the months and days is modular arithmatic, such that 0,
+        # as there is no actual 0 month or day, is the last value.
+        # The original setting will be in the form the user will understand.
         validate_limited_integer(1, 12, month, "month")
-        self._month = month
+        self._month = month % 12
         days_in_month = days_in_period([year, month, 1], 1)
         validate_limited_integer(1, days_in_month, day, "day")
-        self._day = day
+        self._day = day % days_in_month
         validate_limited_integer(
             0,
             NUMBER_OF_EVENTS_IN_A_DAY - 1,
@@ -26,11 +30,6 @@ class Time:
             "event_time_slot"
         )
         self._event_time_slot = event_time_slot
-
-    # Contuing the zero thing, much of the following data simply errors on zero.
-    # Sorry about this, but, I couldn't change to much from how dates are
-    # actually used, there is no 0 day, no 0 month, and not even a 0 year.
-    # Hopefully this doesn't change how date arritmatic work too much.
 
     @property
     def year(self):
