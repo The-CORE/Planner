@@ -6,7 +6,7 @@ def validate_limited_integer(lower_limit, upper_limit, value, name_of_value):
     if not lower_limit <= value <= upper_limit:
         raise ValueError("error_message")
 
-def make_integer(value, name):
+def make_integer(value, name = "value"):
     try:
         return int(value)
     except ValueError:
