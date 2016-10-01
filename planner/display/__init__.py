@@ -1,6 +1,6 @@
 import tkinter
 
-WINDOW_DIMENSIONS = (1280, 720)
+WINDOW_DIMENSIONS = (1200, 1000)
 
 window = tkinter.Tk()
 
