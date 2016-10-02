@@ -3,6 +3,7 @@ from planner import validate_limited_integer
 from planner import make_integer
 from planner import NUMBER_OF_EVENTS_IN_A_DAY
 from .utilities import days_in_period
+from .time_interval import TimeInterval
 
 class Time:
     def __init__(self, year, month, day, event_time_slot):
@@ -125,7 +126,7 @@ class Time:
         return Time(self.year, self.month, self.day, self.event_time_slot)
 
     def __add__(self, value_to_add):
-        if not isinstance(value_to_add, Time):
+        if not isinstance(value_to_add, (Time, TimeInterval)):
             return NotImplemented
         copy = self.copy()
         copy.event_time_slot += value_to_add.event_time_slot
@@ -135,7 +136,7 @@ class Time:
         return copy
 
     def __sub__(self, value_to_sub):
-        if not isinstance(value_to_sub, Time):
+        if not isinstance(value_to_sub, (Time, TimeInterval)):
             return NotImplemented
         copy = self.copy()
         copy.event_time_slot -= value_to_sub.event_time_slot
