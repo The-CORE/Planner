@@ -184,7 +184,10 @@ class Time:
     def event_time_slots_between(self, other_time):
         if not isinstance(other_time, (Time, TimeConstant, TimeInterval)):
             raise TypeError(
-                "other_time must be a Time, TimeConstant, or TimeInterval object."
+                """
+                    other_time must be a Time, TimeConstant,
+                    or TimeInterval object.
+                """
             )
         event_time_slots_between = 0
         self_list = [self.year, self.month, self.day, self.event_time_slots]

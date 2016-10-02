@@ -1,6 +1,5 @@
 from planner.utilities import validate_limited_integer
 from planner import NUMBER_OF_EVENTS_IN_A_DAY
-from .event import Event
 
 class Day:
     def __init__(self):
@@ -9,8 +8,8 @@ class Day:
             self._events.append(None)
 
     def add_event(self, event, time):
-        if not isinstance(event, Event):
-            raise TypeError("event must be an Event object.")
+        if not isinstance(event, str):
+            raise TypeError("event must be a string.")
         validate_limited_integer(0, NUMBER_OF_EVENTS_IN_A_DAY - 1, time, "time")
         self._events[time] = event
 
@@ -22,6 +21,6 @@ class Day:
         return self._events[key]
 
     def __setitem__(self, key, value):
-        if not isinstance(event, Event):
-            raise TypeError("Day objects can only hold events.")
+        if not isinstance(event, str):
+            raise TypeError("Day objects can only hold strings (events).")
         self._events[key] = value
