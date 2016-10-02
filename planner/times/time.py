@@ -160,7 +160,9 @@ class Time:
     # functionality may be retained.
     def days_between(self, other_time):
         if not isinstance(other_time, (Time, TimeConstant, TimeInterval)):
-            raise TypeError("other_time must be a Time object.")
+            raise TypeError(
+                "other_time must be a Time, TimeConstant, or TimeInterval object."
+            )
         days_between = 0
         self_list = [self.year, self.month, self.day]
         other_list = [other_time.year, other_time.month, other_time.day]
@@ -181,7 +183,9 @@ class Time:
 
     def event_time_slots_between(self, other_time):
         if not isinstance(other_time, (Time, TimeConstant, TimeInterval)):
-            raise TypeError("other_time must be a Time object.")
+            raise TypeError(
+                "other_time must be a Time, TimeConstant, or TimeInterval object."
+            )
         event_time_slots_between = 0
         self_list = [self.year, self.month, self.day, self.event_time_slots]
         other_list = [
@@ -204,3 +208,12 @@ class Time:
     @property
     def int(self):
         return self.event_time_slots_between(START_TIME)
+
+    def same_day(self, other_time):
+        if not isinstance(other_time, Time):
+            raise TypeError("other_time must be a Time object.")
+        return (
+            self.year == other_time.year
+            and self.month == other_time.month
+            and self.day == other_time.day
+        )
