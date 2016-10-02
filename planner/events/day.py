@@ -1,4 +1,4 @@
-from planner import validate_limited_integer
+from planner.utilities import validate_limited_integer
 from planner import NUMBER_OF_EVENTS_IN_A_DAY
 from .event import Event
 

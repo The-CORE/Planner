@@ -1,6 +1,9 @@
-from planner import make_integer
+from planner.utilities import make_integer
 
 class TimeInterval:
+    # This class is simply a holder for years, months, days and event_time_slots
+    # Designed to be able to be added and subtracted to/from the Time object.
+
     def __init__(self, years, months, days, event_time_slots):
         self.years = make_integer(years, "years")
         self.months = make_integer(months, "months")

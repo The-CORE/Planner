@@ -1,13 +1,10 @@
-from .constants import START_DATE
-from .constants import START_TIME
-
-from .utilities import leap_year
-from .utilities import days_in_period
-
-from .validation import validate_string_date
-from .validation import validate_list_date
-
 from .time import Time
+from .time_interval import TimeInterval
+
+from planner import START_TIME
+
+from planner.utilities import leap_year
+from planner.utilities import days_in_period
 
 def date_to_int(string_date):
     #Days since STARTDATE
