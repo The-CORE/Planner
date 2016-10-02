@@ -2,3 +2,5 @@ The design currently assumes that only one event can be in each time slot, and w
 Perhaps this needs to be addressed.
 
 Rules need to be able to have a cyclic list of intervals. That should allow for almost all the customisation required.
+
+Display, and rules file reading. Obviously.
