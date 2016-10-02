@@ -7,6 +7,8 @@ from .utilities import days_in_period
 from .validation import validate_string_date
 from .validation import validate_list_date
 
+from .time import Time
+
 def date_to_int(string_date):
     #Days since STARTDATE
     return days_between(START_DATE, string_date)
