@@ -1,4 +1,5 @@
 from planner.utilities import make_integer
+from planner.utilities import get_validated_non_negative_integer
 
 class TimeInterval:
     # This class is simply a holder for years, months, days and event_time_slots
@@ -37,4 +38,12 @@ class TimeInterval:
             and self.months == 0
             and self.days == 0
             and self.event_time_slots == 0
+        )
+
+    def __repr__(self):
+        return "TimeInterval({}, {}, {}, {})".format(
+            self.years,
+            self.months,
+            self.days,
+            self.event_time_slots
         )
