@@ -1,2 +1,2 @@
 #import .graphic
-import .text
+from .text import render

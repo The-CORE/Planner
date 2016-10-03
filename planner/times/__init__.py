@@ -1,5 +1,6 @@
-from .time import Time
+from .time_object import Time
 from .time_interval import TimeInterval
+from .get_current_day import get_current_day
 
 from planner import START_TIME
 

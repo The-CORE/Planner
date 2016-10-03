@@ -47,7 +47,7 @@ def make_week(rules, week_start_time):
     week_start_time.event_time_slot = 0
     week_end_time = week_start_time.copy()
     week_end_time.day += NUMBER_OF_DAYS_IN_A_WEEK
-    week = Week()
+    week = Week(week_start_time)
 
     for rule in rules:
         day = week_start_time.copy()

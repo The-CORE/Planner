@@ -5,7 +5,7 @@ class Day:
     def __init__(self):
         self._events = []
         for _ in range(NUMBER_OF_EVENTS_IN_A_DAY):
-            self._events.append(None)
+            self._events.append("Free")
 
     def add_event(self, event, time):
         if not isinstance(event, str):

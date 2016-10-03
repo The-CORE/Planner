@@ -220,3 +220,7 @@ class Time:
             and self.month == other_time.month
             and self.day == other_time.day
         )
+
+    @property
+    def string_date(self):
+        return str(self.year) + "-" + str(self.month) + "-" + str(self.day)
