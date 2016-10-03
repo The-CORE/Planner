@@ -3,23 +3,35 @@ from .rule import Rule
 from planner import NUMBER_OF_DAYS_IN_A_WEEK
 from planner.times import Time
 
-def _between_dates(date, start_date, end_date):
-    #Checks if the date is between the other two, inclusively.
-    if not isinstance(date, Time):
-        raise TypeError("date must be a Time object.")
-    if not isinstance(start_date, Time):
-        raise TypeError("start_date must be a Time object.")
-    if not isinstance(end_date, Time):
-        raise TypeError("end_date must be a Time object.")
-
-    days_between_start_and_end = start_date.days_between(end_date)
-    days_between_start_and_date = start_date.days_between(date)
-    days_between_date_and_end = date.days_between(end_date)
-
-    return (
-        days_between_start_and_date <= days_between_start_and_end
-        and days_between_date_and_end <= days_between_start_and_end
+def _continue_checking_intervals(
+        testing_time,
+        rule_start_time,
+        week_start_time,
+        week_end_time
+):
+    # Using between dates exclusively would only work if the rule always started
+    # inside the week that you are looking at. Which should not be likely.
+    days_from_rule_start_to_week_start = rule_start_time.days_between(
+        week_start_time
     )
+    days_from_rule_start_to_week_end = rule_start_time.days_between(
+        week_end_time
+    )
+
+    if days_from_rule_start_to_week_end < days_from_rule_start_to_week_start:
+        furthest_week_bound = week_start_time
+    else:
+        furthest_week_bound = week_end_time
+
+    # If the furthest boundry of the week is after the start of the rule...
+    if furthest_week_bound.int > rule_start_time:
+        # ... continue only if the time being tested is smaller (before) than or
+        # equal to, the furthest week boundry.
+        return testing_time.day_based_int <= furthest_week_bound.day_based_int
+    # Otherwise (if the furthest boundry of the week is not after the start of
+    # the rule), continue only if the time being tested is greater (after) than
+    # or equal to the furthest week boundry.
+    return testing_time.day_based_int >= furthest_week_bound.day_based_int
 
 def make_week(rules, week_start_time):
     # The event_time_slot of start_time is ignored.
@@ -45,23 +57,37 @@ def make_week(rules, week_start_time):
                 break
             day.day += 1
 
-        if not rule.interval.is_zero():
-            testing_time = rule.start.copy() + rule.interval
-            while _between_dates(testing_time, week_start_time, week_end_time):
+        if not rule.intervals[0].is_zero():
+            intervals_index = 0
+            testing_time = rule.start.copy() + rule.intervals[intervals_index]
+            while _continue_checking_intervals(
+                    testing_time,
+                    rule.start,
+                    week_start_time,
+                    week_end_time
+            ):
                 day = week_start_time.copy()
                 for day_in_week in range(NUMBER_OF_DAYS_IN_A_WEEK):
                     if testing_time.same_day(day):
                         event_slot = testing_time.event_time_slot
                         Week[day_in_week][event_slot] = rule.event
-                testing_time += rule.interval
+                intervals_index = (intervals_index + 1) % len(rule.intervals)
+                testing_time += rule.intervals[intervals_index]
 
-            testing_time = rule.start.copy() - rule.interval
-            while _between_dates(testing_time, week_start_time, week_end_time):
+            intervals_index = -1
+            testing_time = rule.start.copy() - rule.intervals[intervals_index]
+            while _continue_checking_intervals(
+                    testing_time,
+                    rule.start,
+                    week_start_time,
+                    week_end_time
+            ):
                 day = week_start_time()
                 for day_in_week in range(NUMBER_OF_DAYS_IN_A_WEEK):
                     if testing_time.same_day(day):
                         event_slot = testing_time.event_time_slot
                         Week[day_in_week][event_slot] = rule.event
-                testing_time -= rule.interval
+                intervals_index = (intervals_index - 1) % len(rule.intervals)
+                testing_time -= rule.intervals[intervals_index]
 
     return week

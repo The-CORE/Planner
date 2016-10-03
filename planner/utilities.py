@@ -6,12 +6,13 @@ def leap_year(year):
     return (year % 4 == 0 and (not year %  100 == 0 or year % 400 == 0))
 
 def days_in_period(list_date, index):
-    #Days in period cannot validate the date. Because validating the date
-    #requires that you know the number of days in that period.
+    # Days in period cannot validate the date. Because validating the date
+    # requires that you know the number of days in that period.
 
-    #Zero is year, one is month and two is day.
-    #This system is used because the date determines how many days are in months and years.
-    #And to standardise later functions.
+    # Zero is year, one is month and two is day.
+    # This system is used because the date determines how many days are in
+    # months and years.
+    # And to standardise later functions.
     if index == 0:
         return 366 if leap_year(list_date[0]) else 365
     if index == 1:
@@ -47,8 +48,18 @@ def validate_limited_integer(lower_limit, upper_limit, value, name_of_value):
     if not lower_limit <= value <= upper_limit:
         raise ValueError(error_message)
 
+# Bad function name.
 def make_integer(value, name = "value"):
     try:
         return int(value)
+    except ValueError:
+        raise ValueError(str(name) + "must be, or be convertable to, an int.")
+
+def get_validated_non_negative_integer(value, name = "value"):
+    try:
+        value = int(value)
+        if value < 0:
+            raise ValueError(str(name) + "must be non-negative.")
+        return value
     except ValueError:
         raise ValueError(str(name) + "must be, or be convertable to, an int.")

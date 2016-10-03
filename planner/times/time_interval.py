@@ -5,10 +5,10 @@ class TimeInterval:
     # Designed to be able to be added and subtracted to/from the Time object.
 
     def __init__(self, years = 0, months = 0, days = 0, event_time_slots = 0):
-        self.years = make_integer(years, "years")
-        self.months = make_integer(months, "months")
-        self.days = make_integer(days, "days")
-        self.event_time_slots = make_integer(
+        self.years = get_validated_non_negative_integer(years, "years")
+        self.months = get_validated_non_negative_integer(months, "months")
+        self.days = get_validated_non_negative_integer(days, "days")
+        self.event_time_slots = get_validated_non_negative_integer(
             event_time_slots,
             "event_time_slots"
         )
