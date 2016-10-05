@@ -31,7 +31,6 @@ class TimeConstant:
         )
 
 START_TIME = TimeConstant(1970, 1, 1, 0)
-
 RULES_FILE = "rules.txt"
 
 from . import events
@@ -40,6 +39,9 @@ from . import times
 from . import display
 
 current_date = times.get_current_day()
-rules_list = rules.generate_rules_from_file(RULES_FILE)
+try:
+    rules_list = rules.generate_rules_from_file(RULES_FILE)
+except (FileNotFoundError, ValueError):
+    raise ValueError("Invalid or non-existent rules file.")
 week = rules.make_week(rules_list, current_date)
 display.render(week)
