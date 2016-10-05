@@ -12,7 +12,7 @@ class Time:
     def __init__(self, year, month, day, event_time_slot):
         # While the event time slot will begin at zero, I could bring myself to
         # do it for the months and days, the computer scientist in me was
-        # unfortunately betten by that tiny sliver of common sense that surfaces
+        # unfortunately beaten by that tiny sliver of common sense that surfaces
         # so rarely within me.
         # The reason I don't just assign the properties here, is becuase I don't
         # want to allow carrying when it is first created, only when it is added
@@ -120,7 +120,7 @@ class Time:
         value = make_integer(value)
         # If value is zero, direction will never be used anyway.
         direction = 0 if value == 0 else int(abs(value) / value)
-        while not 0 <= value <= NUMBER_OF_EVENTS_IN_A_DAY:
+        while not 0 <= value <= NUMBER_OF_EVENTS_IN_A_DAY - 1:
             self.day += direction
             value -= direction * NUMBER_OF_EVENTS_IN_A_DAY
         self._event_time_slot = value
@@ -156,32 +156,37 @@ class Time:
             self.event_time_slot
         )
 
-    # This will likely not be used, it is included simply such that only
-    # functionality may be retained.
-    def days_between(self, other_time):
+    def day_displacement_from_time(self, other_time):
         if not isinstance(other_time, (Time, TimeConstant, TimeInterval)):
             raise TypeError(
-                "other_time must be a Time, TimeConstant, or TimeInterval object."
+                """
+                other_time must be a Time, TimeConstant, or TimeInterval object.
+                """
             )
-        days_between = 0
+        day_displacement_from_time = 0
         self_list = [self.year, self.month, self.day]
         other_list = [other_time.year, other_time.month, other_time.day]
-        current_list = start_list.copy()
+        current_list = self_list.copy()
         for index in range(3):
-            initial = start_list[index]
-            final = end_list[index]
+            initial = other_list[index]
+            final = self_list[index]
             direction = -1 if final < initial else 1
             for _ in range(initial, final, direction):
-                days_between += direction * days_in_period(current_list, index)
+                day_displacement_from_time += direction * days_in_period(
+                    current_list, index
+                )
                 current_list[index] += direction
-        return days_between
+        return day_displacement_from_time
+
+    def days_between(self, other_time):
+        return abs(self.day_displacement_from_time(other_time))
 
     # This is not the standard integer form. That is Time.int
     @property
     def day_based_int(self):
-        return self.days_between(START_TIME)
+        return self.day_displacement_from_time(START_TIME)
 
-    def event_time_slots_between(self, other_time):
+    def event_time_slot_displacement_from(self, other_time):
         if not isinstance(other_time, (Time, TimeConstant, TimeInterval)):
             raise TypeError(
                 """
@@ -189,28 +194,31 @@ class Time:
                     or TimeInterval object.
                 """
             )
-        event_time_slots_between = 0
-        self_list = [self.year, self.month, self.day, self.event_time_slots]
+        event_time_slot_displacement_from = 0
+        self_list = [self.year, self.month, self.day, self.event_time_slot]
         other_list = [
             other_time.year,
             other_time.month,
             other_time.day,
-            other_time.event_time_slots
+            other_time.event_time_slot
         ]
-        current_list = start_list.copy()
+        current_list = self_list.copy()
         for index in range(4):
-            initial = start_list[index]
-            final = end_list[index]
+            initial = other_list[index]
+            final = self_list[index]
             direction = -1 if final < initial else 1
             for _ in range(initial, final, direction):
-                days_between += direction \
+                event_time_slot_displacement_from += direction \
                     * time_slots_in_period(current_list, index)
                 current_list[index] += direction
-        return days_between
+        return event_time_slot_displacement_from
+
+    def event_time_slots_between(self, other_time):
+        return abs(self.event_time_slot_displacement_from(other_time))
 
     @property
     def int(self):
-        return self.event_time_slots_between(START_TIME)
+        return self.event_time_slot_displacement_from(START_TIME)
 
     def same_day(self, other_time):
         if not isinstance(other_time, Time):
@@ -224,3 +232,7 @@ class Time:
     @property
     def string_date(self):
         return str(self.year) + "-" + str(self.month) + "-" + str(self.day)
+
+    @property
+    def string_date_day_month(self):
+        return str(self.day) + "/" + str(self.month)

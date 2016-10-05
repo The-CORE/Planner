@@ -1,9 +1,7 @@
-#from . import display
-
-from . import utilities
-
 NUMBER_OF_EVENTS_IN_A_DAY = 48
 NUMBER_OF_DAYS_IN_A_WEEK = 7
+
+from . import utilities
 
 class TimeConstant:
     def __init__(self, year, month, day, event_time_slot):
@@ -24,8 +22,24 @@ class TimeConstant:
         )
         self.event_time_slot = event_time_slot
 
+    def __repr__(self):
+        return "Time({}, {}, {}, {})".format(
+            self.year,
+            self.month,
+            self.day,
+            self.event_time_slot
+        )
+
 START_TIME = TimeConstant(1970, 1, 1, 0)
+
+RULES_FILE = "rules.txt"
 
 from . import events
 from . import rules
 from . import times
+from . import display
+
+current_date = times.get_current_day()
+rules_list = rules.generate_rules_from_file(RULES_FILE)
+week = rules.make_week(rules_list, current_date)
+display.render(week)

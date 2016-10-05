@@ -1,11 +1,13 @@
 from planner.utilities import validate_limited_integer
 from planner import NUMBER_OF_EVENTS_IN_A_DAY
 
+EMPTY_EVENT = ""
+
 class Day:
     def __init__(self):
         self._events = []
         for _ in range(NUMBER_OF_EVENTS_IN_A_DAY):
-            self._events.append("Free")
+            self._events.append(EMPTY_EVENT)
 
     def add_event(self, event, time):
         if not isinstance(event, str):
@@ -21,6 +23,6 @@ class Day:
         return self._events[key]
 
     def __setitem__(self, key, value):
-        if not isinstance(event, str):
+        if not isinstance(value, str):
             raise TypeError("Day objects can only hold strings (events).")
         self._events[key] = value

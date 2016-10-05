@@ -55,7 +55,7 @@ def generate_rules_from_file(directory):
                 + str(line)
                 + " of "
                 + directory
-                + "cannot be converted to Rule."
+                + " cannot be converted to Rule."
             )
         text = f.readline()
         line += 1

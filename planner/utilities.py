@@ -1,3 +1,5 @@
+from planner import NUMBER_OF_EVENTS_IN_A_DAY
+
 def leap_year(year):
     try:
         year = int(year)
@@ -58,8 +60,8 @@ def make_integer(value, name = "value"):
 def get_validated_non_negative_integer(value, name = "value"):
     try:
         value = int(value)
-        if value < 0:
-            raise ValueError(str(name) + "must be non-negative.")
-        return value
     except ValueError:
-        raise ValueError(str(name) + "must be, or be convertable to, an int.")
+        raise ValueError(str(name) + " must be, or be convertable to, an int.")
+    if value < 0:
+        raise ValueError(str(name) + " must be non-negative.")
+    return value
